@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "org.simalliance.openmobileapi.service.pcsc"
+        minSdkVersion 22
+        targetSdkVersion 22
+        versionCode 2
+        versionName "2.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+            }
+        }
+        // This sets the output name of the .apk
+        setProperty("archivesBaseName", "PcscSampleActivity")
+    }
+    // We need to add this because we don't have the .so for 64-bit arm (arm64) build of libpcsclite.so
+    splits {
+        // Configures multiple APKs based on ABI.
+        abi {
+            // Enables building multiple APKs.
+            enable true
+
+            // By default all ABIs are included, so use reset() and include to specify that we only
+            // want APKs for x86, armeabi-v7a, and mips.
+            reset()
+
+            // Specifies a list of ABIs that Gradle should create APKs for.
+            //include "x86", "armeabi-v7a", "mips"
+            include "x86", "x86_64", "armeabi-v7a"
+
+            // Specify that we want to also generate a universal APK that includes all ABIs.
+            universalApk true
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}

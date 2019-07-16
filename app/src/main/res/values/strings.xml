@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PC/SC Sample Application</string>
+    <string name="rescan">Rescan</string>
+</resources>
